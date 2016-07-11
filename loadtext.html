@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <!--
+        1.文本信息延时加载
+
+    -->
+    <style>
+
+        div{
+            width: 300px;
+            height: 200px;
+            background-color: red;
+            margin-top: 1000px;
+            margin-bottom: 100px;
+            font-size:20px;
+            font-weight: bold;
+            text-align:center;
+            color:#fff;
+        }
+
+    </style>
+</head>
+<body>
+
+<div>尚未完全加载</div>
+
+<script>
+    //元素的偏移量
+
+    function offset(ele){
+        var l = ele.offsetLeft; //相对于父级
+        var t = ele.offsetTop;
+        var parent= ele.offsetParent;
+        l+=parent.offsetLeft + parent.clientLeft;
+        t+=parent.offsetTop + parent.clientTop;
+        return {left:l,top:t};
+    }
+
+    var div = document.getElementsByTagName("div").item(0);
+    //获取当前元素的偏移量
+    var eleH = offset(div).top+div.offsetHeight;
+
+    window.onscroll = function(){
+        //判断值  滚动的值+当前页面显示区域的高度 》 元素距离顶端的值
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        var clientH=document.documentElement.clientHeight || document.body.clientHeight;
+        var winHeight = scrollTop + clientH;
+        if(winHeight > eleH){
+            div.innerHTML = "我已经完全加载";
+            div.style.color="yellow";
+        }
+    }
+
+
+</script>
+
+</body>
+</html>

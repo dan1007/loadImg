@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+
+        img {
+            margin-top: 1000px;
+            display: block;
+            height: 200px;
+        }
+
+    </style>
+</head>
+<body>
+
+<img src="smallbg.jpg" data-changeimg="http://www.iwen.wiki/images/img42.png">
+
+<script>
+
+    function offset(ele) {
+        var l = ele.offsetLeft;
+        var t = ele.offsetTop;
+        var container = ele.offsetParent;
+        l += container.offsetLeft + container.clientLeft;
+        t += container.offsetTop + container.clientTop;
+        return {
+            left: l,
+            top: t
+        }
+    }
+
+    var imgele = document.getElementsByTagName("img").item(0);
+
+    var imgeleH = offset(imgele).top + imgele.offsetHeight;
+    //W3C ：document.documentElement.scrollTop
+    //IE6,7,8 没有doctype声明  document.body.scrollTop 来获取 scrollTop高度 ；有doctype声明的 document.documentElement.scrollTop；
+    //  Safari ：window.pageYOffset
+    window.onscroll = function () {
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        var clientH=document.documentElement.clientHeight || document.body.clientHeight;
+        var winHeight = scrollTop + clientH;
+        console.log(winHeight);
+        if(!imgele.loaded){  //如果没有加载完成就继续可以执行，如果加载完成了，下面的代码不让他执行了
+            if (winHeight > imgeleH) {
+                var imgsrc = imgele.getAttribute("data-changeimg");//给图片一个自定义属性
+                imgele.src = "loading.jpg";
+                //我找一个中间值去临时存储图片资源
+                var currentImg = new Image();// 动态创建一个img  createElement(img)
+                currentImg.src = imgsrc;//给临时图片添加当前资源
+                currentImg.onload = function(){//一旦onload执行代表当前图片资源加载完成了
+                    imgele.src = imgsrc;
+                    imgele.loaded = true; //有了
+                }
+            }
+        }
+    };
+    console.log(document.body.scrollTop);
+    console.log(document.documentElement.scrollTop);
+
+</script>
+
+
+</body>
+</html>
